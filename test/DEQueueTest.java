@@ -16,6 +16,9 @@ public class DEQueueTest {
 
     @Test
     public void pushFront() throws Exception {
+        DEQueue<String> st = new DEQueue<>();
+        st.pushFront("asd");
+        assertEquals(1, st.size());
     }
 
     @Test
@@ -24,14 +27,23 @@ public class DEQueueTest {
 
     @Test
     public void popFront() throws Exception {
+
     }
 
     @Test
     public void back() throws Exception {
+        DEQueue<Integer> t = new DEQueue<>();
+        t.pushBack(5);
+        t.pushBack(6);
+        assertEquals(6, t.back());
     }
 
     @Test
     public void front() throws Exception {
+        DEQueue<Integer> t = new DEQueue<>();
+        t.pushFront(5);
+        t.pushFront(6);
+        assertEquals(6, t.front());
     }
 
     @Test

@@ -56,9 +56,13 @@ public class DEQueue<T> {
 
     public void clear(){
 
+        while(size > 0) {
+            front = null;
+            size--;
+        }
     }
-/*
+
     public T[] toArray(){
 
-    }*/
+    }
 }
