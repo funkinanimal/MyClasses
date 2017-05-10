@@ -57,8 +57,8 @@ public class DEQueue<T> {
     public void clear(){
 
     }
-
+/*
     public T[] toArray(){
 
-    }
+    }*/
 }
