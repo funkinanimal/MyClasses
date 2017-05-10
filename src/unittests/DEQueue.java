@@ -32,6 +32,15 @@ public class DEQueue<T> {
 
     public void pushFront(T arg){
 
+        Node now = new Node(arg);
+
+        if(front == null)
+            front = now;
+        else
+            front.setRight(now);
+
+        if(back == null)
+            back = now;
     }
 
     public void popBack(){
