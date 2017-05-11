@@ -3,17 +3,17 @@ package unittests;
 /**
  * Created by Слава on 10.05.2017.
  */
-public class DEQueue<T> {
+class DEQueue<T> {
 
     private Node<T> back;
     private Node<T> front;
     private int size;
 
-    public DEQueue(){
+    DEQueue(){
         size = 0;
     }
 
-    public void pushBack(T arg){
+    void pushBack(T arg){
 
         Node<T> now = new Node<>(arg);
 
@@ -32,7 +32,7 @@ public class DEQueue<T> {
         size++;
     }
 
-    public void pushFront(T arg){
+    void pushFront(T arg){
 
         Node<T> now = new Node<>(arg);
 
@@ -51,7 +51,7 @@ public class DEQueue<T> {
         size++;
     }
 
-    public void popBack(){
+    void popBack(){
         if(back != null){
             back = back.getRight();
             size--;
@@ -60,7 +60,7 @@ public class DEQueue<T> {
             System.out.print("queue is empty");
     }
 
-    public void popFront(){
+    void popFront(){
         if(front != null){
             front = front.getLeft();
             size--;
@@ -69,25 +69,25 @@ public class DEQueue<T> {
             System.out.print("queue is empty");
     }
 
-    public T back(){
+    T back(){
         return back.getValue();
     }
 
-    public T front(){
+    T front(){
         return front.getValue();
     }
 
-    public int size(){
+    int size(){
         return size;
     }
 
-    public void clear(){
+    void clear(){
         front = null;
         back = null;
         size = 0;
     }
 
-    public Object[] toArray(){
+    Object[] toArray(){
         Object[] array = new Object[size];
         Node<T> now = back;
         for (int i = 0; i < size; i++)

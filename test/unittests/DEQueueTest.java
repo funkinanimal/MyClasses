@@ -1,5 +1,6 @@
+package unittests;
+
 import org.junit.Test;
-import unittests.DEQueue;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
