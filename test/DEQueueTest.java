@@ -1,6 +1,7 @@
 import org.junit.Test;
 import unittests.DEQueue;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -23,11 +24,16 @@ public class DEQueueTest {
 
     @Test
     public void popBack() throws Exception {
+        DEQueue<String> q = new DEQueue<>();
+        q.pushFront("test");
+        assertEquals("test", q.popBack());
     }
 
     @Test
     public void popFront() throws Exception {
-
+        DEQueue<Integer> q = new DEQueue<>();
+        q.pushBack(321);
+        assertEquals(Integer.valueOf(321), q.popFront() );
     }
 
     @Test
@@ -35,7 +41,7 @@ public class DEQueueTest {
         DEQueue<Integer> t = new DEQueue<>();
         t.pushBack(5);
         t.pushBack(6);
-        assertEquals(6, t.back());
+        assertEquals(Integer.valueOf(6), t.back());
     }
 
     @Test
@@ -43,7 +49,7 @@ public class DEQueueTest {
         DEQueue<Integer> t = new DEQueue<>();
         t.pushFront(5);
         t.pushFront(6);
-        assertEquals(6, t.front());
+        assertEquals(Integer.valueOf(6), t.front());
     }
 
     @Test
@@ -69,7 +75,7 @@ public class DEQueueTest {
         q.pushBack(1);
         q.pushBack(2);
         q.pushBack(3);
-       // assertArrayEquals(new Integer[]{3, 2, 1}, q.toArray() );
+        assertArrayEquals(new Integer[]{3, 2, 1}, q.toArray() );
     }
 
 }

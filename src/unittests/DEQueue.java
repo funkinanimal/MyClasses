@@ -5,10 +5,8 @@ package unittests;
  */
 public class DEQueue<T> {
 
-    private T type; //<-for what this?
-
-    private Node back;
-    private Node front;
+    private Node<T> back;
+    private Node<T> front;
     private int size;
 
     public DEQueue(){
@@ -17,12 +15,16 @@ public class DEQueue<T> {
 
     public void pushBack(T arg){
 
-        Node now = new Node(arg);
+        Node<T> now = new Node<>(arg);
 
         if (back == null)
             back = now;
         else
+        {
             back.setLeft(now);
+            now.setRight(back);
+            back = now;
+        }
 
         if (front == null)
             front = now;
@@ -32,46 +34,57 @@ public class DEQueue<T> {
 
     public void pushFront(T arg){
 
-        Node now = new Node(arg);
+        Node<T> now = new Node<>(arg);
 
         if(front == null)
             front = now;
         else
+        {
             front.setRight(now);
+            now.setLeft(front);
+            front = now;
+        }
 
         if(back == null)
             back = now;
+
+        size++;
     }
 
-    public void popBack(){
+    public T popBack(){
 
     }
 
-    public void popFront(){
+    public T popFront(){
 
     }
-/*
+
     public T back(){
-
+        return back.getValue();
     }
 
     public T front(){
-
+        return front.getValue();
     }
-*/
+
     public int size(){
         return size;
     }
 
     public void clear(){
-
-        while(size > 0) {
-            front = null;
-            size--;
-        }
+        front = null;
+        back = null;
+        size = 0;
     }
 
-    public T[] toArray(){
-
+    public Object[] toArray(){
+        Object[] array = new Object[size];
+        Node<T> now = back;
+        for (int i = 0; i < size; i++)
+        {
+            array[i] = now.getValue();
+            now = now.getRight();
+        }
+        return array;
     }
 }
