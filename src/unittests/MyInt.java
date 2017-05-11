@@ -30,7 +30,7 @@ class MyInt {
             numbers.add(new Byte(value[i]).intValue());
         }
     }
-/*
+
     MyInt add(MyInt n) {
 
     }
@@ -39,7 +39,7 @@ class MyInt {
 
     }
 
-    MyInt divide(MyInt n){
+/*    MyInt divide(MyInt n){
 
     }
 
@@ -56,7 +56,11 @@ class MyInt {
     }*/
 
     boolean compareTo(MyInt n) {
-
+        if(n.ToString().equals(ToString())){
+            return true;
+        }
+        else
+            return false;
     }
 /*
     MyInt gcd (MyInt n) {
@@ -64,8 +68,11 @@ class MyInt {
     }
 */
     String ToString() {
-
-        return null;
+        String res = "";
+        for (int st:numbers) {
+            res += String.valueOf(st);
+        }
+        return res;
     }
 /*
     long longValue(){
