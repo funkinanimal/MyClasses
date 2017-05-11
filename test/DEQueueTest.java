@@ -25,15 +25,19 @@ public class DEQueueTest {
     @Test
     public void popBack() throws Exception {
         DEQueue<String> q = new DEQueue<>();
-        q.pushFront("test");
-        assertEquals("test", q.popBack());
+        q.pushBack("test");
+        q.pushBack("test2");
+        q.popBack();
+        assertEquals("test", q.back());
     }
 
     @Test
     public void popFront() throws Exception {
         DEQueue<Integer> q = new DEQueue<>();
-        q.pushBack(321);
-        assertEquals(Integer.valueOf(321), q.popFront() );
+        q.pushFront(321);
+        q.pushFront(123);
+        q.popFront();
+        assertEquals(Integer.valueOf(321), q.front());
     }
 
     @Test

@@ -51,12 +51,22 @@ public class DEQueue<T> {
         size++;
     }
 
-    public T popBack(){
-
+    public void popBack(){
+        if(back != null){
+            back = back.getRight();
+            size--;
+        }
+        else
+            System.out.print("queue is empty");
     }
 
-    public T popFront(){
-
+    public void popFront(){
+        if(front != null){
+            front = front.getLeft();
+            size--;
+        }
+        else
+            System.out.print("queue is empty");
     }
 
     public T back(){
