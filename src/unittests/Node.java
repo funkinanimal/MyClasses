@@ -1,10 +1,10 @@
 package unittests;
 
-public class Node<T>
+class Node<T>
 {
     private T value;
-    private Node left;
-    private Node right;
+    private Node<T> left;
+    private Node<T> right;
 
     Node(T value)
     {
@@ -19,19 +19,19 @@ public class Node<T>
         this.value = value;
     }
 
-    Node getLeft() {
+    Node<T> getLeft() {
         return left;
     }
 
-    void setLeft(Node left) {
+    void setLeft(Node<T> left) {
         this.left = left;
     }
 
-    Node getRight() {
+    Node<T> getRight() {
         return right;
     }
 
-    void setRight(Node right) {
+    void setRight(Node<T> right) {
         this.right = right;
     }
 }
