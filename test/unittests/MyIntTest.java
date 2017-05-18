@@ -10,20 +10,26 @@ import static org.junit.Assert.assertEquals;
  */
 public class MyIntTest {
 
-    private static MyInt a, b, c;
+    private static MyInt a, b, c, z, x, y;
 
     @BeforeClass
     public static void beforeClass() {
         a = new MyInt(1234);
         b = new MyInt("5678");
-        c = new MyInt(new byte[] {9, 0, 1, 2});
+        c = new MyInt(new byte[] {0, 9, 1, 2});
+        z = new MyInt(1234);
+        y = new MyInt("5678");
+        x = new MyInt(new byte[] {0, 9, 1, 2});
     }
 
     @Test
     public void add() throws Exception {
-        assertEquals(6912, a.add(b));
-        assertEquals(14690, b.add(c));
-        assertEquals(10246, a.add(c));
+        MyInt d = new MyInt(2468);
+        assertEquals(d.ToString(), a.add(z).ToString());
+        d = new MyInt(11356);
+        assertEquals(d.ToString(), b.add(y).ToString());
+        d = new MyInt(1824);
+        assertEquals(d.ToString(), c.add(x).ToString());
     }
 
     @Test
@@ -52,7 +58,7 @@ public class MyIntTest {
     @Test
     public void compareTo() throws Exception {
         assertEquals(false, a.compareTo(b));
-        MyInt d = new MyInt("9012");
+        MyInt d = new MyInt("912");
         assertEquals(true, d.compareTo(c));
     }
 
@@ -64,7 +70,7 @@ public class MyIntTest {
     public void ToString() throws Exception {
         assertEquals("1234", a.ToString());
         assertEquals("5678", b.ToString());
-        assertEquals("9012", c.ToString());
+        assertEquals("912", c.ToString());
     }
 
     @Test
