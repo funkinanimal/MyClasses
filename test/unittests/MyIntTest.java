@@ -5,9 +5,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by Keshman on 11.05.2017.
- */
 public class MyIntTest {
 
     private static MyInt a, b, c, z, x, y;
