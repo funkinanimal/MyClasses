@@ -1,86 +1,124 @@
 package unittests;
 
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+public class DEQueueTest extends Assert {
 
-/**
- * Created by Слава on 10.05.2017.
- */
-public class DEQueueTest {
-    @Test
-    public void pushBack() throws Exception {
-        DEQueue<String> st = new DEQueue<>();
-        st.pushBack("asd");
-        assertEquals(1, st.size());
+    private DEQueue<String> stringDEQueue;
+    private DEQueue<Integer> integerDEQueue;
+
+    @Before
+    public void BeforeTest()
+    {
+        stringDEQueue = new DEQueue<>();
+        integerDEQueue = new DEQueue<>();
+    }
+
+    @After
+    public void AfterTest()
+    {
+        stringDEQueue.clear();
+        integerDEQueue.clear();
     }
 
     @Test
-    public void pushFront() throws Exception {
-        DEQueue<String> st = new DEQueue<>();
-        st.pushFront("asd");
-        assertEquals(1, st.size());
+    public void pushBack() {
+        stringDEQueue.pushBack("test");
+        assertEquals(1, stringDEQueue.size());
+        assertEquals("test", stringDEQueue.front());
+        stringDEQueue.pushBack("root");
+        assertEquals("root", stringDEQueue.back());
+        assertEquals(2, stringDEQueue.size());
     }
 
     @Test
-    public void popBack() throws Exception {
-        DEQueue<String> q = new DEQueue<>();
-        q.pushBack("test");
-        q.pushBack("test2");
-        q.popBack();
-        assertEquals("test", q.back());
+    public void pushFront() {
+        stringDEQueue.pushFront("test");
+        assertEquals(1, stringDEQueue.size());
+        assertEquals("test", stringDEQueue.back());
+        stringDEQueue.pushFront("root");
+        assertEquals("root", stringDEQueue.front());
+        assertEquals(2, stringDEQueue.size());
     }
 
     @Test
-    public void popFront() throws Exception {
-        DEQueue<Integer> q = new DEQueue<>();
-        q.pushFront(321);
-        q.pushFront(123);
-        q.popFront();
-        assertEquals(Integer.valueOf(321), q.front());
+    public void popBack() {
+        integerDEQueue.pushFront(123);
+        integerDEQueue.pushBack(456);
+        integerDEQueue.popBack();
+        assertEquals(Integer.valueOf(123), integerDEQueue.back());
+        integerDEQueue.popBack();
+        assertEquals(null, integerDEQueue.back());
+        integerDEQueue.popBack();
+        assertEquals(null, integerDEQueue.front());
     }
 
     @Test
-    public void back() throws Exception {
-        DEQueue<Integer> t = new DEQueue<>();
-        t.pushBack(5);
-        t.pushBack(6);
-        assertEquals(Integer.valueOf(6), t.back());
+    public void popFront() {
+        integerDEQueue.pushBack(123);
+        integerDEQueue.pushFront(456);
+        integerDEQueue.popFront();
+        assertEquals(Integer.valueOf(123), integerDEQueue.front());
+        integerDEQueue.popFront();
+        assertEquals(null, integerDEQueue.front());
+        integerDEQueue.popFront();
+        assertEquals(null, integerDEQueue.back());
     }
 
     @Test
-    public void front() throws Exception {
-        DEQueue<Integer> t = new DEQueue<>();
-        t.pushFront(5);
-        t.pushFront(6);
-        assertEquals(Integer.valueOf(6), t.front());
+    public void back() {
+        assertEquals(null, integerDEQueue.back());
+        assertEquals(null, stringDEQueue.back());
+        integerDEQueue.pushFront(1);
+        assertEquals(Integer.valueOf(1), integerDEQueue.back());
+        integerDEQueue.pushBack(2);
+        assertEquals(Integer.valueOf(2), integerDEQueue.back());
     }
 
     @Test
-    public void size() throws Exception {
-        DEQueue<Integer> q = new DEQueue<>();
-        assertEquals(0, q.size());
-        q.pushBack(0);
-        assertEquals(1, q.size());
+    public void front() {
+        assertEquals(null, integerDEQueue.front());
+        assertEquals(null, stringDEQueue.front());
+        stringDEQueue.pushFront("test1");
+        assertEquals("test1", stringDEQueue.front());
+        stringDEQueue.pushBack("test2");
+        assertEquals("test1", stringDEQueue.front());
+    }
+
+    @Test
+    public void size() {
+        assertEquals(0, integerDEQueue.size());
+        integerDEQueue.pushBack(1);
+        assertEquals(1, integerDEQueue.size());
+        integerDEQueue.popFront();
+        assertEquals(0, integerDEQueue.size());
+        integerDEQueue.popFront();
+        assertEquals(0, integerDEQueue.size());
     }
 
     @Test
     public void clear() throws Exception {
-        DEQueue<String> q = new DEQueue<>();
-        q.pushBack("arg");
-        assertEquals(1, q.size());
-        q.clear();
-        assertEquals(0, q.size());
+        integerDEQueue.pushBack(1);
+        integerDEQueue.pushFront(2);
+        integerDEQueue.clear();
+        assertEquals(0, integerDEQueue.size());
+        assertEquals(null, integerDEQueue.front());
+        assertEquals(null, integerDEQueue.back());
     }
 
     @Test
     public void toArray() throws Exception {
-        DEQueue<Integer> q = new DEQueue<>();
-        q.pushBack(1);
-        q.pushBack(2);
-        q.pushBack(3);
-        assertArrayEquals(new Integer[]{3, 2, 1}, q.toArray() );
+        integerDEQueue.pushFront(1);
+        integerDEQueue.pushFront(2);
+        integerDEQueue.pushFront(3);
+        assertArrayEquals(new Integer[]{1, 2, 3}, integerDEQueue.toArray() );
+        stringDEQueue.pushBack("3");
+        stringDEQueue.pushBack("2");
+        stringDEQueue.pushBack("1");
+        assertArrayEquals(new String[]{"1", "2", "3"}, stringDEQueue.toArray());
     }
 
 }

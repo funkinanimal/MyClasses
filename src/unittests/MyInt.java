@@ -124,6 +124,8 @@ class MyInt {
 
             }
         }
+
+        return new MyInt(1);
     }
 /*
    MyInt divide(MyInt n){

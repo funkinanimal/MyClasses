@@ -1,8 +1,5 @@
 package unittests;
 
-/**
- * Created by Слава on 10.05.2017.
- */
 class DEQueue<T> {
 
     private Node<T> back;
@@ -53,7 +50,15 @@ class DEQueue<T> {
 
     void popBack(){
         if(back != null){
-            back = back.getRight();
+            if (back.getRight() != null)
+            {
+                back = back.getRight();
+                back.setLeft(null);
+            }
+            else {
+                back = null;
+                front = null;
+            }
             size--;
         }
         else
@@ -62,7 +67,14 @@ class DEQueue<T> {
 
     void popFront(){
         if(front != null){
-            front = front.getLeft();
+            if (front.getLeft() != null) {
+                front = front.getLeft();
+                front.setRight(null);
+            }
+            else {
+                back = null;
+                front = null;
+            }
             size--;
         }
         else
@@ -70,11 +82,17 @@ class DEQueue<T> {
     }
 
     T back(){
-        return back.getValue();
+        if (back != null)
+            return back.getValue();
+        else
+            return null;
     }
 
     T front(){
-        return front.getValue();
+        if (front != null)
+            return front.getValue();
+        else
+            return null;
     }
 
     int size(){
