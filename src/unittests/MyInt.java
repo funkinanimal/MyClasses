@@ -2,36 +2,36 @@ package unittests;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-/**
- * Created by Слава on 10.05.2017.
- */
-class MyInt {
+final class MyInt {
 
-    private ArrayList<Integer> numbers = new ArrayList<>();
-    private boolean minus;
+    private List<Integer> numbers = new ArrayList<>();
+    private final boolean minus;
 
-    MyInt(int value){
+    MyInt(long value){
 
         minus = value < 0;
 
         while (value != 0)
         {
-            numbers.add(Math.abs(value % 10));
+            numbers.add((int)Math.abs(value % 10));//TODO make this abs later
             value /= 10;
         }
 
         Collections.reverse(numbers);
+        numbers = Collections.unmodifiableList(numbers);
     }
 
     MyInt(String value) {
 
-        minus = Integer.valueOf(value) < 0;
+        minus = value.charAt(0) == '-';
 
         for ( int i = minus ? 1 : 0; i < value.length(); i++) {
             numbers.add(Character.getNumericValue(value.charAt(i)));
         }
 
+        numbers = Collections.unmodifiableList(numbers);
     }
 
     MyInt(byte[] value) {
@@ -41,15 +41,16 @@ class MyInt {
         for (int i = 1; i < value.length; i++) {
             numbers.add(new Byte(value[i]).intValue());
         }
+
+        numbers = Collections.unmodifiableList(numbers);
     }
 
-    public boolean isMinus() {return minus;}
 
     MyInt add(MyInt n) {
         String n1, n2;
         boolean s1 = true, s2 = true;
-        n1 = ToString();
-        n2 = n.ToString();
+        n1 = toString();
+        n2 = n.toString();
 
         if (n1.charAt(0) == '-')
         {
@@ -103,32 +104,71 @@ class MyInt {
     }
 
     MyInt subtract(MyInt n) {
-        String n1, n2;
-        n1 = ToString();
-        n2 = n.ToString();
 
-        if (compareTo(n))
+        String n1, n2;
+        boolean nIsGreater = false;
+
+        n1 = toString();
+        n2 = n.toString();
+
+
+        if (compareTo(n)) {
             return new MyInt(0);
-        else if (isGreater(n)){
+        }
+        else if (n.isGreater(this)){
             String buf = n1;
             n1 = n2;
             n2 = buf;
+            nIsGreater = true;
         }
+
+        int dif = n1.length() - n2.length();
+        StringBuilder zero = new StringBuilder();
+        for (int i = 0; i < dif; i++)
+            zero.append("0");
+
+        n2 = zero.toString() + n2;
+
+        boolean buf = false;
+        StringBuilder out = new StringBuilder();
 
         for (int i = n1.length() - 1; i >= 0; i--)
         {
             int d1, d2;
             d1 = Character.getNumericValue(n1.charAt(i));
-            if (i < n2.length())
-            {
+            d2 = Character.getNumericValue(n2.charAt(i));
 
+            if (buf)
+            {
+                d1--;
+                buf = false;
+            }
+
+            if (d1 >= d2)
+            {
+                out.append(d1 - d2);
+            }
+            else
+            {
+                out.append(10 + d1 - d2);
+                buf = true;
             }
         }
 
-        return new MyInt(1);
+        out = out.reverse();
+        String ans = out.toString();
+
+        while (ans.charAt(0) == '0')
+            ans = ans.substring(1);
+
+        if (nIsGreater)
+            ans = "-" + ans;
+
+        return new MyInt(ans);
     }
+
 /*
-   MyInt divide(MyInt n){
+    MyInt divide(MyInt n){
 
     }
 
@@ -139,49 +179,54 @@ class MyInt {
     MyInt min (MyInt n) {
 
     }
-*/
-    private boolean isGreater(MyInt n)
-    {
-        if(isMinus() ^ n.isMinus())
-        {
-            return isMinus();
-        }
-        else if (ToString().length() == n.ToString().length())
-        {
-            for (int i = 0; i < ToString().length(); i++)
-            {
-                int n1 = Character.getNumericValue(ToString().charAt(i));
-                int n2 = Character.getNumericValue(n.ToString().charAt(i));
-                if (n1 != n2)
-                    return n2 > n1;
-            }
-            return true;
-        }
-        else
-            return ToString().length() < n.ToString().length();
+
+    static MyInt abs (MyInt n) {
+
     }
 
-  /*  static MyInt abs (MyInt n) {
-
-    }*/
-
-    boolean compareTo(MyInt n) {
-        return n.ToString().equals(ToString());
-    }
-/*
     MyInt gcd (MyInt n) {
 
     }
-*/
-    String ToString() {
-        String res = minus ? "-" : "";
-        for (int st:numbers) {
-            res += String.valueOf(st);
-        }
-        return res;
-    }
-/*
+
     long longValue(){
 
-    }*/
+    }
+*/
+
+    boolean compareTo(MyInt n) {
+        return n.toString().equals(toString());
+    }
+
+    boolean isGreater(MyInt n)
+    {
+        if(isMinus() ^ n.isMinus())
+        {
+            return n.isMinus();
+        }
+        else if (toString().length() == n.toString().length())
+        {
+            for (int i = 0; i < toString().length(); i++)
+            {
+                int n1 = Character.getNumericValue(toString().charAt(i));
+                int n2 = Character.getNumericValue(n.toString().charAt(i));
+                if (n1 != n2)
+                    return n1 > n2;
+            }
+            return true;//unreachable
+        }
+        else
+            return toString().length() > n.toString().length();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder(minus ? "-" : "");
+        for (int number : numbers) {
+            res.append(String.valueOf(number));
+        }
+        return res.toString();
+    }
+
+    boolean isMinus() {return minus;}
+
 }
