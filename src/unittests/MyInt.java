@@ -76,12 +76,43 @@ final class MyInt {
             if (buf != 0)
             {
                 if (this.amount > n.amount)
-                    out.append(buf + this.numbers.get(lim));
-                else if (this.amount < n.amount)
-                    out.append(buf + n.numbers.get(lim));
+                {
+                    int now;
+                    while (true) {
+
+                        now = this.numbers.get(lim);
+                        lim++;
+
+                        if (now != 9)
+                            break;
+
+                        out.append(0);
+                    }
+                    out.append(now + buf);
+                }
+                else if (this.amount < n.amount) {
+                    int now;
+                    while (true) {
+
+                        now = n.numbers.get(lim);
+                        lim++;
+
+                        if (now != 9)
+                            break;
+
+                        out.append(0);
+                    }
+                    out.append(now + buf);
+                }
                 else
                     out.append(buf);
+
             }
+
+            if (lim < this.amount)
+                out.append(new StringBuilder(this.toString().substring(0, this.amount - lim)).reverse());
+            if (lim < n.amount)
+                out.append(new StringBuilder(n.toString().substring(0 ,n.amount - lim)).reverse());
 
             String ans = out.reverse().toString();
 
@@ -128,14 +159,24 @@ final class MyInt {
 
                     if (buf != 0)
                     {
-                        int q = lim;
-                        int now = this.numbers.get(q);
-                        while (now == 0) {
-                            q++;
-                            now = this.numbers.get(q);
+                        int now;
+                        while (true) {
+
+                            now = this.numbers.get(lim);
+                            lim++;
+
+                            if (now != 0)
+                                break;
+
+                            out.append(9);
                         }
                         out.append(now - buf);
                     }
+
+                    if (lim < this.amount)
+                        out.append(new StringBuilder(this.toString().substring(0, this.amount - lim )).reverse());
+                    if (lim < n.amount)
+                        out.append(new StringBuilder(n.toString().substring(0 ,n.amount - lim )).reverse());
 
                     String ans = out.reverse().toString();
 
@@ -199,6 +240,21 @@ final class MyInt {
             }
         }
         return ans;
+    }
+
+    long longValue() {
+
+        long q = 0;
+        for(int i = amount - 1; i >= 0; i--) {
+            long now = numbers.get(i) * (long)Math.pow(10, i);
+            long free = Long.MAX_VALUE - q;
+            if (now < free)
+                q += now;
+            else
+                q += free;
+        }
+
+        return q * (minus ? -1 : 1);
     }
 
     @Override

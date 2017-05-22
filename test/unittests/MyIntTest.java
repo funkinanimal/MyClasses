@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigInteger;
+
 public class MyIntTest extends Assert{
 
     private MyInt a, b, c, x, y, z;
@@ -27,6 +29,9 @@ public class MyIntTest extends Assert{
         assertEquals(d.toString(), x.add(y).toString());
         d = new MyInt(0);
         assertEquals(d.toString(), c.add(z).toString());
+        d = new MyInt(1999);
+        MyInt e = new MyInt(1);
+        assertEquals("2000",d.add(e).toString());
     }
 
     @Test
@@ -41,6 +46,34 @@ public class MyIntTest extends Assert{
         assertEquals(d.toString(), y.subtract(a).toString());
         d = new MyInt(0);
         assertEquals(d.toString(), a.subtract(a).toString());
+        d = new MyInt("2000");
+        MyInt e = new MyInt(1);
+        MyInt f = new MyInt("1999");
+        assertEquals(f.toString(), d.subtract(e).toString());
+
+        d = new MyInt(Long.MAX_VALUE);
+        d = d.add(new MyInt(5));
+        d = d.subtract(new MyInt(6));
+        assertEquals("9223372036854775806", d.toString());
+    }
+
+    @Test
+    public void test() {
+        BigInteger b = new BigInteger("9223372036854775807");
+        b = b.add(BigInteger.valueOf(0));
+        System.out.print(b.longValue());
+    }
+
+    @Test
+    public void longValue() {
+        MyInt d = new MyInt(Long.MAX_VALUE);
+        d = d.add(new MyInt(5));
+        d = d.subtract(new MyInt(7));
+        assertEquals(Long.MAX_VALUE - 2, d.longValue());
+        d = new MyInt(Long.MIN_VALUE);
+        d = d.subtract(new MyInt(2));
+        d = d.add(new MyInt(3));
+        assertEquals(Long.MIN_VALUE + 1, d.longValue());
     }
 
     @Test
@@ -81,6 +114,5 @@ public class MyIntTest extends Assert{
         assertEquals("-6789", y.toString());
         assertEquals("-912", z.toString());
     }
-
 
 }
