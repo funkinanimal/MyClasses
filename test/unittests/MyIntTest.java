@@ -6,87 +6,81 @@ import org.junit.Test;
 
 public class MyIntTest extends Assert{
 
-    private MyInt a, b, c, z, x, y;
+    private MyInt a, b, c, x, y, z;
 
     @Before
     public void Before() {
         a = new MyInt(1234);
         b = new MyInt("5678");
         c = new MyInt(new byte[] {0, 9, 1, 2});
-        z = new MyInt(1234);
-        y = new MyInt("5678");
-        x = new MyInt(new byte[] {0, 9, 1, 2});
+        x = new MyInt(-2345);
+        y = new MyInt("-6789");
+        z = new MyInt(new byte[] {1, 9, 1, 2});
     }
 
-    @Test
-    public void isGreater() {
-        assertEquals(true, y.isGreater(a));
-        assertEquals(false, x.isGreater(a));
-    }
 
     @Test
-    public void add() throws Exception {
-        MyInt d = new MyInt(2468);
-        assertEquals(d.toString(), a.add(z).toString());
-        d = new MyInt(11356);
-        assertEquals(d.toString(), b.add(y).toString());
-        d = new MyInt(1824);
-        assertEquals(d.toString(), c.add(x).toString());
-    }
-
-    @Test
-    public void max()
-    {
-
+    public void add() {
+        MyInt d = new MyInt(6912);
+        assertEquals(d.toString(), a.add(b).toString());
+        d = new MyInt(-9134);
+        assertEquals(d.toString(), x.add(y).toString());
+        d = new MyInt(0);
+        assertEquals(d.toString(), c.add(z).toString());
     }
 
     @Test
     public void subtract() {
-        MyInt d = new MyInt(0);
-        assertEquals(true, d.compareTo(a.subtract(a)));
-        d = new MyInt(-4444);
-        assertEquals(true, d.compareTo(a.subtract(b)));
-        d = new MyInt(4766);
-        assertEquals(true, d.compareTo(b.subtract(c)));
-        d = new MyInt(-322);
-        assertEquals(d.toString(), c.subtract(a).toString());
-        d = new MyInt(4444);
-        assertEquals(true, d.compareTo(b.subtract(a)));
+        MyInt d = new MyInt(-4444);
+        assertEquals(d.toString(), a.subtract(b).toString());
+        d = new MyInt(-9134);
+        assertEquals(d.toString(), x.subtract(y).toString());
+        d = new MyInt(8023);
+        assertEquals(d.toString(), b.subtract(x).toString());
+        d = new MyInt(-8023);
+        assertEquals(d.toString(), y.subtract(a).toString());
+        d = new MyInt(0);
+        assertEquals(d.toString(), a.subtract(a).toString());
     }
 
     @Test
-    public void divide() throws Exception {
+    public void max() {
+        assertEquals(b.toString(), MyInt.max(a, b).toString());
+        assertEquals(c.toString(), MyInt.max(c, z).toString());
+    }
+
+    @Test
+    public void min() {
+        assertEquals(a.toString(), MyInt.min(a, b).toString());
+        assertEquals(z.toString(), MyInt.min(c, z).toString());
+    }
+
+    @Test
+    public void abs() {
+        MyInt d = new MyInt(2345);
+        assertEquals(d.toString(), MyInt.abs(x).toString());
+        d = new MyInt(0);
+        assertEquals(d.toString(), MyInt.abs(d).toString());
+        assertEquals(a.toString(), MyInt.abs(a).toString());
     }
 
 
     @Test
-    public void min() throws Exception {
+    public void compareTo() {
+        assertEquals(true, a.compareTo(b) < 0);
+        assertEquals(true, z.compareTo(c) < 0);
+        assertEquals(true, b.compareTo(z) > 0);
     }
 
     @Test
-    public void abs() throws Exception {
-    }
-
-    @Test
-    public void compareTo() throws Exception {
-        assertEquals(false, a.compareTo(b));
-        MyInt d = new MyInt("912");
-        assertEquals(true, d.compareTo(c));
-    }
-
-    /*@Test
-    public void gcd() throws Exception {
-    }*/
-
-    @Test
-    public void ToString() throws Exception {
+    public void ToString() {
         assertEquals("1234", a.toString());
         assertEquals("5678", b.toString());
         assertEquals("912", c.toString());
+        assertEquals("-2345", x.toString());
+        assertEquals("-6789", y.toString());
+        assertEquals("-912", z.toString());
     }
 
-    @Test
-    public void longValue() throws Exception {
-    }
 
 }

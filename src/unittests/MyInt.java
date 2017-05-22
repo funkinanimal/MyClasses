@@ -8,26 +8,30 @@ final class MyInt {
 
     private List<Integer> numbers = new ArrayList<>();
     private final boolean minus;
+    private final int amount;
 
     MyInt(long value){
 
         minus = value < 0;
-
+        int count = 0;
         while (value != 0)
         {
-            numbers.add((int)Math.abs(value % 10));//TODO make this abs later
+            numbers.add((int)Math.abs(value % 10));
             value /= 10;
+            count++;
         }
 
-        Collections.reverse(numbers);
+        amount = count;
         numbers = Collections.unmodifiableList(numbers);
     }
 
     MyInt(String value) {
 
         minus = value.charAt(0) == '-';
+        amount = minus ? value.length() - 1 : value.length();
+        int last = minus ? 1 : 0;
 
-        for ( int i = minus ? 1 : 0; i < value.length(); i++) {
+        for ( int i = value.length() - 1; i >= last; i--) {
             numbers.add(Character.getNumericValue(value.charAt(i)));
         }
 
@@ -37,196 +41,173 @@ final class MyInt {
     MyInt(byte[] value) {
 
         minus = value[0] == 1;
+        amount = value.length - 1;
 
-        for (int i = 1; i < value.length; i++) {
+        for (int i = value.length - 1; i >= 0; i--) {
             numbers.add(new Byte(value[i]).intValue());
         }
 
         numbers = Collections.unmodifiableList(numbers);
     }
 
+    private MyInt(MyInt n ) {
+        this.minus = n.minus;
+        this.amount = n.amount;
+        this.numbers = n.numbers;
+    }
 
     MyInt add(MyInt n) {
-        String n1, n2;
-        boolean s1 = true, s2 = true;
-        n1 = toString();
-        n2 = n.toString();
 
-        if (n1.charAt(0) == '-')
-        {
-            s1 = false;
-            n1 = n1.substring(1);
-        }
-        if (n2.charAt(0) == '-')
-        {
-            s2 = false;
-            n2 = n2.substring(1);
-        }
-
-        int max = Math.max(n1.length(), n2.length());
-        int buf = 0;
-        ArrayList<Integer> out = new ArrayList<>();
-
-        for (int i = max - 1; i >= 0; i--)
-        {
-            int now1 = 0, now2 = 0;
-            if (i <  n1.length())
-            {
-                now1 = Character.getNumericValue( n1.charAt(i) );
-            }
-            if (i < n2.length())
-            {
-                now2 = Character.getNumericValue( n2.charAt(i) );
-            }
-            int ans = now1 + now2 + buf;
-            if (ans > 9)
-            {
-                buf = (ans - (ans % 10)) / 10;
-                out.add(ans % 10);
-            }
+        if (this.minus != n.minus) {
+            if (this.minus)
+                return n.subtract(MyInt.abs(this));
             else
-            {
-                out.add(ans);
+                return this.subtract(MyInt.abs(n));
+        }
+        else {
+            int lim = MyInt.min(this, n).amount;
+            StringBuilder out = new StringBuilder();
+            int buf = 0;
+            for (int i = 0; i < lim; i++){
+                int now = this.numbers.get(i) + n.numbers.get(i) + buf;
+                out.append(now % 10);
+                buf = now / 10;
             }
+            if (buf != 0)
+            {
+                if (this.amount > n.amount)
+                    out.append(buf + this.numbers.get(lim));
+                else if (this.amount < n.amount)
+                    out.append(buf + n.numbers.get(lim));
+                else
+                    out.append(buf);
+            }
+
+            String ans = out.reverse().toString();
+
+            while (ans.charAt(0) == '0')
+                ans = ans.substring(1);
+
+            if (minus)
+                ans = "-" + ans;
+
+            return new MyInt(ans);
         }
 
-        if (buf != 0)
-            out.add(buf);
-
-        Collections.reverse(out);
-
-        String res = s1^s2 ? "-" : "";
-        for (int st:out) {
-            res += String.valueOf(st);
-        }
-
-        return new MyInt(res);
     }
 
     MyInt subtract(MyInt n) {
 
-        String n1, n2;
-        boolean nIsGreater = false;
+        if (this.minus != n.minus) {
 
-        n1 = toString();
-        n2 = n.toString();
-
-
-        if (compareTo(n)) {
-            return new MyInt(0);
-        }
-        else if (n.isGreater(this)){
-            String buf = n1;
-            n1 = n2;
-            n2 = buf;
-            nIsGreater = true;
-        }
-
-        int dif = n1.length() - n2.length();
-        StringBuilder zero = new StringBuilder();
-        for (int i = 0; i < dif; i++)
-            zero.append("0");
-
-        n2 = zero.toString() + n2;
-
-        boolean buf = false;
-        StringBuilder out = new StringBuilder();
-
-        for (int i = n1.length() - 1; i >= 0; i--)
-        {
-            int d1, d2;
-            d1 = Character.getNumericValue(n1.charAt(i));
-            d2 = Character.getNumericValue(n2.charAt(i));
-
-            if (buf)
-            {
-                d1--;
-                buf = false;
-            }
-
-            if (d1 >= d2)
-            {
-                out.append(d1 - d2);
-            }
+            if (this.minus)
+                return new MyInt("-" + MyInt.abs(this).add(n).toString());
             else
-            {
-                out.append(10 + d1 - d2);
-                buf = true;
+                return this.add(MyInt.abs(n));
+
+        }
+        else {
+            if (minus)
+                return new MyInt("-" + MyInt.abs(this).add(MyInt.abs(n)).toString());
+            else {
+                if (this.compareTo(n) == 0)
+                    return new MyInt(0);
+
+                if (this.compareTo(n) < 0)
+                    return new MyInt("-" + n.subtract(this).toString());
+                else {
+
+                    int lim = MyInt.min(this, n).amount;
+                    StringBuilder out = new StringBuilder();
+                    int buf = 0;
+                    for (int i = 0; i < lim; i++) {
+                        buf = this.numbers.get(i) - n.numbers.get(i) - buf;
+                        out.append((buf + 10) % 10);
+                        buf = buf < 0 ? 1 : 0;
+                    }
+
+                    if (buf != 0)
+                    {
+                        int q = lim;
+                        int now = this.numbers.get(q);
+                        while (now == 0) {
+                            q++;
+                            now = this.numbers.get(q);
+                        }
+                        out.append(now - buf);
+                    }
+
+                    String ans = out.reverse().toString();
+
+                    while (ans.charAt(0) == '0')
+                        ans = ans.substring(1);
+
+                    return new MyInt(ans);
+                }
             }
         }
-
-        out = out.reverse();
-        String ans = out.toString();
-
-        while (ans.charAt(0) == '0')
-            ans = ans.substring(1);
-
-        if (nIsGreater)
-            ans = "-" + ans;
-
-        return new MyInt(ans);
     }
 
-/*
-    MyInt divide(MyInt n){
-
+    static MyInt max (MyInt n1, MyInt n2) {
+        if (n1.compareTo(n2) > 0)
+            return new MyInt(n1);
+        else
+            return new MyInt(n2);
     }
 
-    MyInt max (MyInt n) {
-
-    }
-
-    MyInt min (MyInt n) {
-
+    static MyInt min (MyInt n1, MyInt n2) {
+        if (n1.compareTo(n2) < 0)
+            return new MyInt(n1);
+        else
+            return new MyInt(n2);
     }
 
     static MyInt abs (MyInt n) {
-
-    }
-
-    MyInt gcd (MyInt n) {
-
-    }
-
-    long longValue(){
-
-    }
-*/
-
-    boolean compareTo(MyInt n) {
-        return n.toString().equals(toString());
-    }
-
-    boolean isGreater(MyInt n)
-    {
-        if(isMinus() ^ n.isMinus())
-        {
-            return n.isMinus();
-        }
-        else if (toString().length() == n.toString().length())
-        {
-            for (int i = 0; i < toString().length(); i++)
-            {
-                int n1 = Character.getNumericValue(toString().charAt(i));
-                int n2 = Character.getNumericValue(n.toString().charAt(i));
-                if (n1 != n2)
-                    return n1 > n2;
-            }
-            return true;//unreachable
-        }
+        if (!n.minus)
+            return new MyInt(n);
         else
-            return toString().length() > n.toString().length();
+            return new MyInt(n.toString().substring(1));
+    }
+
+    int compareTo(MyInt n)
+    {
+        int ans = 0;
+        if (this.amount == n.amount)
+        {
+            String s1 = this.toString(), s2 = n.toString();
+            for (int i = 0; i < this.amount; i++)
+            {
+                int d1, d2;
+                d1 = Character.getNumericValue(s1.charAt(i));
+                d2 = Character.getNumericValue(s2.charAt(i));
+                if (d1 > d2)
+                {
+                    ans = 1;
+                }
+                if (d1 < d2)
+                {
+                    ans = -1;
+                }
+            }
+        }
+        else {
+            if (this.amount > n.amount){
+                ans = 1;
+            }
+            if (this.amount < n.amount) {
+                ans = -1;
+            }
+        }
+        return ans;
     }
 
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder(minus ? "-" : "");
-        for (int number : numbers) {
-            res.append(String.valueOf(number));
+        for (int i = amount - 1; i >= 0; i--) {
+            res.append(String.valueOf(numbers.get(i)));
         }
         return res.toString();
     }
-
-    boolean isMinus() {return minus;}
 
 }
