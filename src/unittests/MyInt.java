@@ -6,6 +6,9 @@ import java.util.List;
 
 final class MyInt {
 
+    private final static MyInt ZERO = new MyInt(0);
+    private final static MyInt ONE = new MyInt(1);
+
     private List<Integer> numbers = new ArrayList<>();
     private final boolean minus;
     private final int amount;
@@ -180,8 +183,9 @@ final class MyInt {
 
                     String ans = out.reverse().toString();
 
-                    while (ans.charAt(0) == '0')
-                        ans = ans.substring(1);
+                    if (!ans.equals("0"))
+                        while (ans.charAt(0) == '0')
+                            ans = ans.substring(1);
 
                     return new MyInt(ans);
                 }
@@ -224,10 +228,12 @@ final class MyInt {
                 if (d1 > d2)
                 {
                     ans = 1;
+                    break;
                 }
                 if (d1 < d2)
                 {
                     ans = -1;
+                    break;
                 }
             }
         }
@@ -240,6 +246,40 @@ final class MyInt {
             }
         }
         return ans;
+    }
+
+    MyInt gcd(MyInt n) {
+
+        String s1 = this.toString();
+        if (s1.equals("0"))
+            return n;
+        String s2 = n.toString();
+        if (s2.equals("0"))
+            return this;
+
+        while (!s1.equals(s2))
+        {
+            MyInt a = MyInt.abs(new MyInt(s1));
+            MyInt b = MyInt.abs(new MyInt(s2));
+
+            if (a.compareTo(b) > 0) {
+                s1 = a.subtract(b).toString();
+            }
+            else {
+                s2 = b.subtract(a).toString();
+            }
+        }
+
+        return new MyInt(s1);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder(minus ? "-" : "");
+        for (int i = amount - 1; i >= 0; i--) {
+            res.append(String.valueOf(numbers.get(i)));
+        }
+        return res.toString();
     }
 
     long longValue() {
@@ -256,14 +296,4 @@ final class MyInt {
 
         return q * (minus ? -1 : 1);
     }
-
-    @Override
-    public String toString() {
-        StringBuilder res = new StringBuilder(minus ? "-" : "");
-        for (int i = amount - 1; i >= 0; i--) {
-            res.append(String.valueOf(numbers.get(i)));
-        }
-        return res.toString();
-    }
-
 }

@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.math.BigInteger;
-
 public class MyIntTest extends Assert{
 
     private MyInt a, b, c, x, y, z;
@@ -59,9 +57,24 @@ public class MyIntTest extends Assert{
 
     @Test
     public void test() {
-        BigInteger b = new BigInteger("9223372036854775807");
-        b = b.add(BigInteger.valueOf(0));
-        System.out.print(b.longValue());
+        System.out.print(0 % 2);
+        System.out.print(5 % 2);
+        System.out.print(3 % 2);
+        System.out.print(1 % 2);
+        System.out.print(8 % 2);
+    }
+
+    @Test
+    public void gcd() {
+        MyInt d = new MyInt(70);
+        MyInt e = new MyInt(105);
+        assertEquals("35", d.gcd(e).toString());
+        d = new MyInt(-70);
+        assertEquals("35", d.gcd(e).toString());
+        d = new MyInt(1);
+        assertEquals("1", d.gcd(e).toString());
+        d = new MyInt("0");
+        assertEquals("105", d.gcd(e).toString());
     }
 
     @Test
