@@ -6,8 +6,8 @@ import java.util.List;
 
 final class MyInt {
 
-    private final static MyInt ZERO = new MyInt(0);
-    private final static MyInt ONE = new MyInt(1);
+    final static MyInt ZERO = new MyInt("0");
+    final static MyInt ONE = new MyInt("1");
 
     private List<Integer> numbers = new ArrayList<>();
     private final boolean minus;
@@ -17,6 +17,12 @@ final class MyInt {
 
         minus = value < 0;
         int count = 0;
+
+        if (value == 0) {
+            numbers.add(0);
+            count++;
+        }
+
         while (value != 0)
         {
             numbers.add((int)Math.abs(value % 10));
@@ -119,8 +125,9 @@ final class MyInt {
 
             String ans = out.reverse().toString();
 
-            while (ans.charAt(0) == '0')
-                ans = ans.substring(1);
+            if (!ans.equals("0"))
+                while (ans.charAt(0) == '0')
+                    ans = ans.substring(1);
 
             if (minus)
                 ans = "-" + ans;
@@ -191,6 +198,53 @@ final class MyInt {
                 }
             }
         }
+    }
+
+    MyInt multiply (MyInt n) {
+
+        if (this.compareTo(MyInt.ZERO) == 0 || n.compareTo(MyInt.ZERO) == 0)
+            return MyInt.ZERO;
+
+        if(this.minus && !n.minus) {
+            return new MyInt("-" + MyInt.abs(this).multiply(n).toString());
+        }
+
+        if (!this.minus && n.minus) {
+            return new MyInt("-" + this.multiply(MyInt.abs(n)).toString());
+        }
+
+        if (this.minus) {
+            return new MyInt(MyInt.abs(this).multiply(MyInt.abs(n)));
+        }
+
+        MyInt ans = MyInt.ZERO;
+
+        for (int i = 0; i < n.amount; i++) {
+            MyInt now = this.multiply(n.numbers.get(i));
+            StringBuilder temp = new StringBuilder(now.toString());
+            for (int j = 0; j < i; j++) {
+                temp.append("0");
+            }
+            ans = ans.add(new MyInt(temp.toString()));
+        }
+
+        return new MyInt(ans);
+    }
+
+    private MyInt multiply (int n) {
+
+        int buf = 0;
+        StringBuilder out = new StringBuilder();
+        for (int i = 0; i < this.amount; i++) {
+            int now = this.numbers.get(i) * n + buf;
+            out.append(now % 10);
+            buf = now / 10;
+        }
+
+        if (buf != 0)
+            out.append(buf);
+
+        return new MyInt(out.reverse().toString());
     }
 
     static MyInt max (MyInt n1, MyInt n2) {

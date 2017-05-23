@@ -18,6 +18,10 @@ public class MyIntTest extends Assert{
         z = new MyInt(new byte[] {1, 9, 1, 2});
     }
 
+    @Test
+    public void test() {
+
+    }
 
     @Test
     public void add() {
@@ -48,7 +52,6 @@ public class MyIntTest extends Assert{
         MyInt e = new MyInt(1);
         MyInt f = new MyInt("1999");
         assertEquals(f.toString(), d.subtract(e).toString());
-
         d = new MyInt(Long.MAX_VALUE);
         d = d.add(new MyInt(5));
         d = d.subtract(new MyInt(6));
@@ -56,13 +59,19 @@ public class MyIntTest extends Assert{
     }
 
     @Test
-    public void test() {
-        System.out.print(0 % 2);
-        System.out.print(5 % 2);
-        System.out.print(3 % 2);
-        System.out.print(1 % 2);
-        System.out.print(8 % 2);
+    public void multiply() {
+        MyInt d = new MyInt(7006652);
+        assertEquals(d.toString(), a.multiply(b).toString());
+        d = new MyInt(-2138640);
+        assertEquals(d.toString(), c.multiply(x).toString());
+        d = new MyInt(-38547942);
+        assertEquals(d.toString(), y.multiply(b).toString());
+        d = MyInt.ZERO;
+        assertEquals(d.toString(), a.multiply(d).toString());
+        d = MyInt.ONE;
+        assertEquals(a.toString(), d.multiply(a).toString());
     }
+
 
     @Test
     public void gcd() {
